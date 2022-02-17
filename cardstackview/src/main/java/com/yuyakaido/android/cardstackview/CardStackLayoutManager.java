@@ -253,19 +253,22 @@ public class CardStackLayoutManager
         state.height = getHeight();
 
         if (state.isSwipeCompleted()) {
-            // ■ 概要
-            // スワイプが完了したタイミングで、スワイプ済みのViewをキャッシュから削除する
-            // キャッシュの削除を行わないと、次回更新時にスワイプ済みのカードが表示されてしまう
-            // スワイプ済みカードが表示される場合、データソースは正しく、表示だけが古い状態になっている
-            //
-            // ■ 再現手順
-            // 1. `removeAndRecycleView(getTopView(), recycler);`をコメントアウトする
-            // 2. VisibleCount=1に設定し、最後のカードがスワイプされたらページングを行うようにする
-            // 3. カードを1枚だけ画面に表示する（このカードをAとする）
-            // 4. Aをスワイプする
-            // 5. カードを1枚だけ画面に表示する（このカードをBとする）
-            // 6. ページング完了後はBが表示されるはずが、Aが画面に表示される
-            removeAndRecycleView(getTopView(), recycler);
+//            Overview-
+//            Delete the swiped View from the cache when the swipe is complete
+//            If you do not delete the cache, the swiped card will be displayed at the next update
+//            If you see a swiped card, the data source is correct and only the display is out of date
+//
+//            Reproducibility procedure-
+//            1. Comment out `removeAndRecycleView (getTopView (), recycler);`
+//            2. Set VisibleCount = 1 to paging when the last card is swiped
+//            3. Display only one card on the screen (let this card be A)
+//            4. Swipe A
+//            5. Display only one card on the screen (let this card be B)
+//            6. B should be displayed after paging is complete, but A is displayed on the screen
+            View topView = getTopView();
+            if (topView != null) {
+                removeAndRecycleView(topView, recycler);
+            }
 
             final Direction direction = state.getDirection();
 
